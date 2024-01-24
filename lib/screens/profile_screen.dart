@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -221,9 +221,8 @@ class _TopPortion extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: NetworkImage(
-                        'https://unsplash.com/photos/silhouette-of-a-man-facing-the-sunset-K2u71wv2eI4',
-                      ),
+                      image: AssetImage(
+                          'images/profile_image.jpg'), // Ganti dengan path gambar lokal Anda
                     ),
                   ),
                 ),

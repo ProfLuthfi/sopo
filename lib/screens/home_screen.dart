@@ -28,20 +28,17 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
+            selectedIcon: Icon(Icons.dashboard),
+            icon: Icon(Icons.dashboard),
+            label: 'Dasboard',
           ),
           NavigationDestination(
             icon: Icon(Icons.contact_page),
             label: 'Contact',
           ),
           NavigationDestination(
-            icon: Badge(
-              label: Text('2'),
-              child: Icon(Icons.messenger_sharp),
-            ),
-            label: 'Messages',
+            icon: Icon(Icons.people),
+            label: 'Profile',
           ),
         ],
       ),

@@ -1,137 +1,155 @@
 import 'package:flutter/material.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  final List<String> usernames = <String>[
+    'UserA',
+    'UserB',
+    'UserC',
+    'UserD',
+    'UserE'
+  ];
+  final List<String> posts = <String>[
+    'Post A content here.',
+    'Post B content here.',
+    'Post C content here.',
+    'Post D content here.',
+    'Post E content here.',
+  ];
+  final List<int> images = <int>[1, 2, 3, 4, 5];
+
+  // Sets to track liked, commented, and shared items
+  Set<int> likedItems = {};
+  Set<int> commentedItems = {};
+  Set<int> sharedItems = {};
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Instagram Clone'),
-        backgroundColor: Colors.black,
+        title: Text('Social Post'),
       ),
       body: _buildListView(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => print("Tapped"),
-        child: const Icon(Icons.camera_alt),
-        backgroundColor: Colors.blue,
+        child: Icon(Icons.add),
+        onPressed: () => print("tap"),
       ),
     );
   }
 
   Widget _buildListView() {
-    return ListView.builder(
-      itemCount: 10, // Replace with your actual number of posts
-      itemBuilder: (BuildContext context, int index) {
-        return _buildPostCard(index);
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: ListView.separated(
+        padding: const EdgeInsets.all(8),
+        itemCount: usernames.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(
+                          'https://picsum.photos/250?image=${images[index]}'),
+                    ),
+                    SizedBox(width: 16),
+                    Text(
+                      usernames[index],
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
+                Text(
+                  posts[index],
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 16),
+                Image.network(
+                  'https://picsum.photos/400?image=${images[index]}',
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildActionButton(
+                        Icons.thumb_up, 'Like', index, likedItems),
+                    _buildActionButton(
+                        Icons.comment, 'Comment', index, commentedItems),
+                    _buildActionButton(
+                        Icons.share, 'Share', index, sharedItems),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) =>
+            SizedBox(height: 16),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(
+      IconData icon, String label, int index, Set<int> itemsSet) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (itemsSet.contains(index)) {
+            itemsSet.remove(index);
+          } else {
+            itemsSet.add(index);
+          }
+        });
       },
-    );
-  }
-
-  Widget _buildPostCard(int index) {
-    return Card(
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildPostHeader(),
-          _buildPostImage(index),
-          _buildPostActions(),
-          _buildPostLikes(),
-          _buildPostCaption(),
-          const SizedBox(height: 8),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPostHeader() {
-    return ListTile(
-      leading: CircleAvatar(
-        radius: 20,
-        backgroundColor: Colors.blue,
-        // Replace with your user's profile image
-        backgroundImage: AssetImage('assets/profile_image.jpg'),
-      ),
-      title: Text('Username'),
-      subtitle: Text('Location'),
-      trailing: const Icon(Icons.more_vert),
-    );
-  }
-
-  Widget _buildPostImage(int index) {
-    // Replace with your actual image URL
-    String imageUrl = 'https://picsum.photos/400?image=$index';
-
-    return Container(
-      width: double.infinity, // Full width of the card
-      height: 300, // Adjust the height as needed
-      child: Image.network(
-        imageUrl,
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-
-  Widget _buildPostActions() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            IconButton(
-              onPressed: () => print('Like'),
-              icon: const Icon(Icons.favorite_outline),
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: itemsSet.contains(index) ? Colors.blue : Colors.grey[200],
+              borderRadius: BorderRadius.circular(8),
             ),
-            IconButton(
-              onPressed: () => print('Comment'),
-              icon: const Icon(Icons.comment),
-            ),
-            IconButton(
-              onPressed: () => print('Share'),
-              icon: const Icon(Icons.send),
-            ),
-          ],
-        ),
-        const IconButton(
-          onPressed: null,
-          icon: Icon(Icons.bookmark_border),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPostLikes() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Text(
-        '100 likes',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Widget _buildPostCaption() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Username',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            child: Icon(icon, size: 20, color: Colors.white),
           ),
-          const SizedBox(height: 4),
-          Text('Caption text...'),
+          SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: itemsSet.contains(index) ? Colors.blue : Colors.grey,
+            ),
+          ),
         ],
       ),
     );
   }
-}
-
-void main() {
-  runApp(const MaterialApp(
-    home: DashboardScreen(),
-  ));
 }
