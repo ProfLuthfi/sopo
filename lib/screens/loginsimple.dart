@@ -11,8 +11,12 @@ class LoginSimple extends StatefulWidget {
 
 class _LoginSimpleState extends State<LoginSimple> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _email = '';
-  String _password = '';
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
+  String _email = 'haisyam@gmail.com';
+  String _password = '12345';
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +75,7 @@ class _LoginSimpleState extends State<LoginSimple> {
               }
               return null;
             },
+            controller: emailController,
           ),
           SizedBox(height: 10),
           TextFormField(
@@ -91,15 +96,36 @@ class _LoginSimpleState extends State<LoginSimple> {
               }
               return null;
             },
+            controller: passController,
           ),
           SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()));
-                print('Email : $_email');
-                print('Password : $_password');
+                print('Email : ${emailController.text}');
+                print('Password : ${passController.text}');
+
+                if (emailController.text == _email &&
+                    passController.text == _password) {
+                  print('Login Berhasil');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Login Berhasil'),
+                        backgroundColor: Colors.green),
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                  );
+                } else if (emailController.text != _email ||
+                    passController.text != _password) {
+                  print('Email or Password Invalid!');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Email or Password Invalid'),
+                        backgroundColor: Colors.redAccent),
+                  );
+                }
               }
             },
             child: Text(
