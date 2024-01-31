@@ -11,11 +11,9 @@ class LoginSimple extends StatefulWidget {
 
 class _LoginSimpleState extends State<LoginSimple> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   final emailController = TextEditingController();
   final passController = TextEditingController();
-  String _email = 'haisyam@gmail.com';
+  String _email = 'eimluthfi@gmail.com';
   String _password = '12345';
 
   @override
@@ -108,11 +106,7 @@ class _LoginSimpleState extends State<LoginSimple> {
                 if (emailController.text == _email &&
                     passController.text == _password) {
                   print('Login Berhasil');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Login Berhasil'),
-                        backgroundColor: Colors.green),
-                  );
+                  showCustomSnackBar(context, 'Login Berhasil', Colors.green);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -120,11 +114,8 @@ class _LoginSimpleState extends State<LoginSimple> {
                 } else if (emailController.text != _email ||
                     passController.text != _password) {
                   print('Email or Password Invalid!');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Email or Password Invalid'),
-                        backgroundColor: Colors.redAccent),
-                  );
+                  showCustomSnackBar(
+                      context, 'Email or Password Invalid', Colors.redAccent);
                 }
               }
             },
@@ -142,5 +133,42 @@ class _LoginSimpleState extends State<LoginSimple> {
         ],
       ),
     );
+  }
+
+  void showCustomSnackBar(
+      BuildContext context, String message, Color backgroundColor) {
+    final overlay = Overlay.of(context);
+    OverlayEntry overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 50, // Menempatkan snackbar di paling atas
+        width: MediaQuery.of(context).size.width,
+        child: Material(
+          color: Colors.transparent,
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                message,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+
+    Future.delayed(Duration(seconds: 2), () {
+      overlayEntry.remove();
+    });
   }
 }
