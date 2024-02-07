@@ -29,17 +29,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Set<int> commentedItems = {};
   Set<int> sharedItems = {};
 
+  // Controller for the comment text field
+  final TextEditingController commentController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed
+    commentController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Social Post'),
+        leading: IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {
+            // Tampilkan form ketika tombol tambah (+) ditekan
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddPostForm(),
+              ),
+            );
+          },
+        ),
       ),
       body: _buildListView(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => print("tap"),
-      ),
     );
   }
 
@@ -108,6 +126,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         Icons.share, 'Share', index, sharedItems),
                   ],
                 ),
+                // Menampilkan kotak teks ketika tombol komentar ditekan
+                if (commentedItems.contains(index))
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: TextField(
+                      controller: commentController,
+                      decoration: InputDecoration(
+                        hintText: 'Add a comment...',
+                        border: OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.send),
+                          onPressed: () {
+                            // Mengirim komentar ketika tombol kirim ditekan
+                            String comment = commentController.text;
+                            print('Comment: $comment');
+                            // Tambahkan logika untuk mengirim komentar ke server atau database di sini
+                            // Bersihkan teks field setelah mengirim komentar
+                            commentController.clear();
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           );
@@ -149,6 +190,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AddPostForm extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Add New Post'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Title'),
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Content'),
+              maxLines: null,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Tambahkan logika untuk menyimpan post ke database atau operasi lainnya
+                Navigator.pop(context); // Kembali ke halaman sebelumnya
+              },
+              child: Text('Submit'),
+            ),
+          ],
+        ),
       ),
     );
   }

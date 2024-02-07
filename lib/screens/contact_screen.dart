@@ -33,7 +33,7 @@ class _ContactScreenState extends State<ContactScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               children: <Widget>[
                 ElevatedButton(

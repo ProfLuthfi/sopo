@@ -1,41 +1,53 @@
-// lib/screens/splash_screen.dart
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'package:sopo/screens/home_screen.dart';
+import 'package:lottie/lottie.dart';
+import 'package:sopo/screens/loginsimple.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Membuat delay menggunakan Timer untuk simulasi splash screen selama 3 detik
-    Timer(Duration(seconds: 3), () {
-      // Pindah ke halaman berikutnya setelah splash screen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    });
+    Timer(
+        Duration(seconds: 10),
+        () => Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen())));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Tambahkan logo atau gambar splash screen di sini
-            Text(
-              'My App',
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            Center(
+              child: Lottie.asset(
+                'asset/animation/splash_animation.json', // Replace with the path to your Lottie JSON file
+                fit: BoxFit.cover,
+                width: 400, // Adjust the width and height as needed
+                height: 400,
+                repeat: true, // Set to true if you want the animation to loop
+              ),
             ),
-            SizedBox(height: 20),
-            CircularProgressIndicator(),
+            const Center(
+              child: Text(
+                "SOPO",
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueAccent),
+              ),
+            )
           ],
         ),
       ),

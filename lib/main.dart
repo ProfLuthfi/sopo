@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sopo/screens/home_screen.dart';
 import 'package:sopo/screens/loginsimple.dart';
+import 'package:sopo/screens/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,20 +9,12 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: SplashScreen(), // Ganti dengan SplashScreen
+    return MaterialApp(
+      // theme: ThemeData(backgroundColor: Colors.white),
+      home: SplashScreen(),
     );
-  }
-}
-
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return LoginSimple();
   }
 }
